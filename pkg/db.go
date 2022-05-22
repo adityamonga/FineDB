@@ -106,3 +106,21 @@ func (ts *TransactionStack) Delete(key string) {
 		}
 	}
 }
+
+
+func (ts *TransactionStack) Count(val string) {
+	ActiveTransaction := ts.Peek()
+	count := 0
+	var store map[string]string
+	if ActiveTransaction != nil {
+		store = ActiveTransaction.store
+	} else {
+		store = GlobalStore
+	}
+	for _, value := range store {
+		if value == val {
+			count ++
+		}
+	}
+	fmt.Println(count)
+}

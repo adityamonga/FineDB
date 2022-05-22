@@ -29,7 +29,7 @@ func main(){
 		case "SET": 		items.Set(operation[1], operation[2])
 		case "GET": 		items.Get(operation[1])
         case "DELETE": 		items.Delete(operation[1])
-		// case "COUNT": 		items.Count(operation[1])
+		case "COUNT": 		items.Count(operation[1])
 		case "STOP": 		os.Exit(0)
 		default:
 			fmt.Printf("ERROR: Unrecognised Operation %s\n", operation[0])

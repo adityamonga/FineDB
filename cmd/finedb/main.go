@@ -21,7 +21,7 @@ func main(){
 		// split the text into operation strings
 		operation := strings.Fields(text)
 
-		switch operation[0] {
+		switch strings.ToUpper(operation[0]) {
 		case "BEGIN": 		items.PushTransaction()
 		case "ROLLBACK": 	items.Rollback()
 		case "COMMIT": 		items.Commit(); items.PopTransaction()

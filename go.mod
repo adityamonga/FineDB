@@ -1,3 +1,3 @@
-module github.com/adityamonga/FineDB
+module github.com/adityamonga/KosDB
 
 go 1.18

@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	db "github.com/adityamonga/FineDB/pkg"
+	db "github.com/adityamonga/KosDB/pkg"
 )
 
 func main(){

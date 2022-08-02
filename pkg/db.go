@@ -28,7 +28,7 @@ type TransactionStack struct {
 
 func NewStorage(load_history bool) (s *Storage) {
 	s = &Storage{
-		path:       "/tmp/kos.json",
+		path:       "/tmp/KosDB.json",
 		permission: fs.FileMode(0644)}
 	GlobalStore = make(map[string]string)
 

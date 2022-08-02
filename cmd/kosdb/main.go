@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"os"
 	"strings"
@@ -10,8 +11,12 @@ import (
 )
 
 func main() {
+	var load_history bool
+	flag.BoolVar(&load_history, "load_history", false, "Load last persisted data.")
+	flag.Parse()
 	reader := bufio.NewReader(os.Stdin)
-	items := &db.TransactionStack{}
+	storage := db.NewStorage(load_history)
+	items := &db.TransactionStack{Storage: storage}
 	for {
 		fmt.Printf("> ")
 		text, _ := reader.ReadString('\n')

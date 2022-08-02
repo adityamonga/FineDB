@@ -3,10 +3,18 @@ package db
 import (
 	"encoding/json"
 	"fmt"
+	"io/fs"
+	"io/ioutil"
 	"os"
 )
 
-var GlobalStore = make(map[string]string)
+// var GlobalStore = make(map[string]string)
+var GlobalStore map[string]string
+
+type Storage struct {
+	path       string
+	permission fs.FileMode
+}
 
 type Transaction struct {
 	store map[string]string
@@ -14,8 +22,27 @@ type Transaction struct {
 }
 
 type TransactionStack struct {
-	top  *Transaction
-	size int
+	top     *Transaction
+	size    int
+	Storage *Storage
+}
+
+func NewStorage(load_history bool) (s *Storage) {
+	s = &Storage{
+		path:       "/tmp/kos.json",
+		permission: fs.FileMode(0644)}
+	GlobalStore = make(map[string]string)
+
+	if load_history {
+		jsonFile, err := os.Open(s.path)
+		if err != nil {
+			fmt.Println(err)
+		}
+		defer jsonFile.Close()
+		byteValue, _ := ioutil.ReadAll(jsonFile)
+		json.Unmarshal(byteValue, &GlobalStore)
+	}
+	return
 }
 
 func (ts *TransactionStack) Persist() {
@@ -23,7 +50,7 @@ func (ts *TransactionStack) Persist() {
 	if err != nil {
 		fmt.Println("ERROR: Could not serialize store")
 	}
-	err = os.WriteFile("/tmp/kos.json", data, 0644)
+	err = os.WriteFile(ts.Storage.path, data, ts.Storage.permission)
 	if err != nil {
 		fmt.Println("ERROR: Persist failed")
 	}

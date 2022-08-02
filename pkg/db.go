@@ -159,3 +159,24 @@ func (ts *TransactionStack) Count(val string) {
 	}
 	fmt.Println(count)
 }
+
+func (ts *TransactionStack) Keys() {
+	ActiveTransaction := ts.Peek()
+	keys := make([]string, 0)
+
+	for k := range GlobalStore {
+		keys = append(keys, k)
+	}
+	if ActiveTransaction != nil {
+		for {
+			for k := range ActiveTransaction.store {
+				keys = append(keys, k)
+			}
+			if ActiveTransaction.next == nil {
+				break
+			}
+			ActiveTransaction = ActiveTransaction.next
+		}
+	}
+	fmt.Println(keys)
+}

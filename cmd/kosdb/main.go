@@ -46,6 +46,8 @@ func main() {
 			items.Count(operation[1])
 		case "PERSIST":
 			items.Persist()
+		case "KEYS":
+			items.Keys()
 		case "STOP":
 			os.Exit(0)
 		case "EXIT":

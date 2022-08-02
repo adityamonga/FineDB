@@ -1,19 +1,32 @@
 package db
 
 import (
+	"encoding/json"
 	"fmt"
+	"os"
 )
 
 var GlobalStore = make(map[string]string)
 
 type Transaction struct {
 	store map[string]string
-	next *Transaction
+	next  *Transaction
 }
 
 type TransactionStack struct {
-	top *Transaction
+	top  *Transaction
 	size int
+}
+
+func (ts *TransactionStack) Persist() {
+	data, err := json.Marshal(GlobalStore)
+	if err != nil {
+		fmt.Println("ERROR: Could not serialize store")
+	}
+	err = os.WriteFile("/tmp/kos.json", data, 0644)
+	if err != nil {
+		fmt.Println("ERROR: Persist failed")
+	}
 }
 
 func (ts *TransactionStack) PushTransaction() {
@@ -25,7 +38,7 @@ func (ts *TransactionStack) PushTransaction() {
 
 func (ts *TransactionStack) PopTransaction() {
 	if ts.top == nil {
-		fmt.Println("ERROR: No Active Transaction")	
+		fmt.Println("ERROR: No Active Transaction")
 	} else {
 		ts.top = ts.top.next
 		ts.size--
@@ -35,7 +48,6 @@ func (ts *TransactionStack) PopTransaction() {
 func (ts *TransactionStack) Peek() *Transaction {
 	return ts.top
 }
-
 
 func (ts *TransactionStack) Commit() {
 	var ActiveTransaction = ts.Peek()
@@ -52,7 +64,6 @@ func (ts *TransactionStack) Commit() {
 	}
 }
 
-
 func (ts *TransactionStack) Rollback() {
 	if ts.top != nil {
 		for key := range ts.top.store {
@@ -62,7 +73,6 @@ func (ts *TransactionStack) Rollback() {
 		fmt.Println("Error: No Active Transaction")
 	}
 }
-
 
 func (ts *TransactionStack) Set(key, value string) {
 	ActiveTransaction := ts.Peek()
@@ -107,7 +117,6 @@ func (ts *TransactionStack) Delete(key string) {
 	}
 }
 
-
 func (ts *TransactionStack) Count(val string) {
 	ActiveTransaction := ts.Peek()
 	count := 0
@@ -119,7 +128,7 @@ func (ts *TransactionStack) Count(val string) {
 	}
 	for _, value := range store {
 		if value == val {
-			count ++
+			count++
 		}
 	}
 	fmt.Println(count)

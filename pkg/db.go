@@ -95,8 +95,6 @@ func (ts *TransactionStack) Rollback() {
 		for key := range ts.top.store {
 			delete(ts.top.store, key)
 		}
-	} else {
-		fmt.Println("Error: No Active Transaction")
 	}
 }
 

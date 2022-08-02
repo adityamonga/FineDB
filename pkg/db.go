@@ -8,7 +8,6 @@ import (
 	"os"
 )
 
-// var GlobalStore = make(map[string]string)
 var GlobalStore map[string]string
 
 type Storage struct {

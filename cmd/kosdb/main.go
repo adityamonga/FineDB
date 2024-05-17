@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	db "github.com/adityamonga/KosDB/pkg"
+	db "github.com/mongashake/KosDB/pkg"
 )
 
 func main() {
